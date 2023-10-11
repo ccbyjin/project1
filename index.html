@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Hannah Chen">
+  <title>Monster Slayer</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap">
+  <!-- 全局字體 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Gabarito&display=swap" rel="stylesheet">
+  <!-- 全局粗體 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@700&display=swap" rel="stylesheet">
+  <!-- h1字體 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap" rel="stylesheet">
+  <!-- vue -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js" defer></script>
+  <!-- Bootstrap -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" 
+    rel="stylesheet"
+    integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" 
+    crossorigin="anonymous">
+  <!-- style -->
+  <style>
+    * {
+      font-family: 'Gabarito', cursive;
+      /* background-color: #29323b; */
+      font-size: 14px;
+    }
+    h1 {
+      font-family: 'Dela Gothic One', cursive;
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+    .log--player {
+      background-color: rgb(96, 128, 116);
+      color: white;
+      margin: 15px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      padding-left: 10px;
+      padding-right: 10px;
+      border-radius: 20px;
+      font-size: 15px;
+    }
+    .log--monster {
+      background-color: rgb(255, 65, 51);
+      color: white;
+      margin: 15px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      padding-left: 10px;
+      padding-right: 10px;
+      border-radius: 20px;
+      font-size: 15px;
+    }
+    .log--heal {
+      color: rgb(162, 212, 99);
+      font-size: 1.2rem;
+      margin-left: 5px;
+    }
+    .log--damage {
+      color: rgb(199, 0, 57);
+      font-size: 1.2rem;
+      margin-left: 5px;
+    }
+    .primary {
+      color: #29323b;
+    }
+    .light {
+      color: white;
+    }
+    .dark {
+      color: #0D2B36;
+    }
+    .second{
+      color: #D59F26;
+    }
+    .cs{
+      box-shadow: 0px 0px 12px rgb(0, 0, 0, 0.09);
+      /* box-shadow: 0px 0px 12px rgb(255, 255, 255); */
+    }
+    .name{
+      font-weight: 700;
+      font-size: 24px;
+      text-align: center;
+    }
+    .im{
+      font-weight: 700;
+      font-size: 28px;
+      text-align: center;
+    }
+    .myList{
+      margin-bottom: 5px;
+    }
+  </style>
+  <!-- js -->
+  <script src="app.js" defer></script>
+</head>
+
+<body>
+  <!-- header -->
+  <div 
+    id="game" 
+    class="container d-flex flex-column align-items-center p-5 w-md-75">
+    <header class="mb-3">
+      <h1 class="row">MONSTER</br>SLAYER</h1>
+    </header>
+    <section class="row row-cols-2 container-sm col-lg-8">
+      <!-- monster -->
+      <div class="col pe-0 mb-2">
+        <div class="card cs overflow-hidden">
+          <img src="/img/monster.png" class="w-100" alt="monsterImage">
+          <div class="row mt-3 px-2">
+            <h2 class="name">Monster</h2>
+            <div class="mb-4">
+              <div class="progress rounded-pill">
+                <div class="progress-bar bg-danger rounded-pill" :style="monsterBarStyles">
+                  {{monsterHealth}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- player -->
+      <div class="col pe-0 mb-2">
+        <div class="card cs overflow-hidden">
+          <img src="/img/player.png" class="w-100" alt="playerImage">
+          <div class="row mt-3 px-2">
+            <h2 class="name">Player</h2>
+            <div class="mb-4">
+              <div class="progress rounded-pill">
+                <div class="progress-bar bg-danger rounded-pill" :style="playerBarStyles">
+                  {{playerHealth}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- 勝利者區塊 -->
+    <div class="card w-75 py-5 w-60 cs align-items-center" v-if="winner">
+      <h2 class="m-1" style="font-weight: 700; color: #D59F26;">GAME OVER!</h2>
+      <h3 v-if="winner === 'monster'">You LOST :(</h3>
+      <h3 v-else-if="winner === 'player'">You WON :)</h3>
+      <h3 v-else>It's a DRAW !</h3>
+      <button @click="startGame" class="btn btn-dark sc w-35 mt-2">Start New Game</button>
+    </div>
+    <!-- 操作 -->
+    <div class="row row-cols-2 row-cols-md-4 w-100 p-4 ">
+      <div class="col">
+        <button 
+        @click="attackMonster" 
+        class="btn btn-dark m-1 w-100 cs" 
+        style="height: 85px;">ATTACK</button>
+      </div>
+      <div class="col">
+        <button 
+        :disabled="mayUseSpecialAttack" @click="specialAttackMonster" 
+        class="btn btn-danger m-1 w-100 cs" 
+        style="height: 85px;">SPECIAL ATTACK</button>
+      </div>
+      <div class="col">
+        <button 
+        @click="healPlayer" 
+        class="btn btn-success m-1 w-100 cs" 
+        style="height: 85px;">HEAL</button>
+      </div>
+      <div class="col">
+        <button 
+        @click="surrender" 
+        class="btn btn-secondary m-1 w-100 cs" style="height: 85px; font-size: 13px;">SURRENDER</button>
+      </div>
+    </div>
+    <!-- battle log -->
+    <section class="container-sm">
+      <h2 class="im mb-2">BATTLE LOG</h2>
+      <ul class=" row list-unstyled">
+        <li class="myList" v-for="logMessage in logMessage">
+          <!-- 角色前綴 -->
+          <span
+            :class="{'log--player': logMessage.actionBy === 'player', 'log--monster': logMessage.actionBy === 'monster'}">
+            {{ logMessage.actionBy === 'player' ? 'Player' : 'Monster'}}</span>
+          <!-- 角色行為 -->
+          <span v-if="logMessage.actionType === 'heal'"> 
+            HEAL <span class="log--heal">{{ logMessage.actionValue }} xp</span></span>
+          <span v-else-if="logMessage.actionType === 'sp'"> 
+            SPECIAL ATTACK <span class="log--damage">{{ logMessage.actionValue }}</span></span>
+          <span v-else> ATTACK <span class="log--damage">{{ logMessage.actionValue }} xp</span></span>
+        </li>
+      </ul>
+    </section>
+  </div>
+</body>
+
+</html>

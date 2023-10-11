@@ -31,13 +31,20 @@
   <style>
     * {
       font-family: 'Gabarito', cursive;
-      /* background-color: #29323b; */
       font-size: 14px;
+    }
+    body {
+      color: #fff;
+      background:linear-gradient(0deg, #151515, #29323b);;
     }
     h1 {
       font-family: 'Dela Gothic One', cursive;
       font-size: 2.5rem;
       font-weight: 700;
+      color:white;
+    }
+    h3 {
+      color: #0D2B36;
     }
     .log--player {
       background-color: rgb(96, 128, 116);
@@ -49,6 +56,7 @@
       padding-right: 10px;
       border-radius: 20px;
       font-size: 15px;
+      box-shadow: 0px 0px 5px 1px #1515156f;
     }
     .log--monster {
       background-color: rgb(255, 65, 51);
@@ -60,6 +68,7 @@
       padding-right: 10px;
       border-radius: 20px;
       font-size: 15px;
+      box-shadow: 0px 0px 5px 1px #1515156f;
     }
     .log--heal {
       color: rgb(162, 212, 99);
@@ -67,7 +76,7 @@
       margin-left: 5px;
     }
     .log--damage {
-      color: rgb(199, 0, 57);
+      color: rgb(255, 75, 126);
       font-size: 1.2rem;
       margin-left: 5px;
     }
@@ -84,13 +93,21 @@
       color: #D59F26;
     }
     .cs{
-      box-shadow: 0px 0px 12px rgb(0, 0, 0, 0.09);
-      /* box-shadow: 0px 0px 12px rgb(255, 255, 255); */
+      /* box-shadow: 0px 0px 12px rgb(0, 0, 0, 0.09); */
+      box-shadow: 0px 0px 8px rgba(255, 255, 255, 0.698);
+    }
+    .cs2{
+      box-shadow: 0px 0px 8px rgb(255, 255, 255) inset;
+    }
+    .cs3{
+      box-shadow: 0px 0px 5px 1px #151515;
     }
     .name{
       font-weight: 700;
       font-size: 24px;
       text-align: center;
+      background-color: white;
+      color: #0D2B36;
     }
     .im{
       font-weight: 700;
@@ -99,6 +116,21 @@
     }
     .myList{
       margin-bottom: 5px;
+      padding-left: 3rem;
+      margin-top: 5px;
+    }
+    .card{
+      background-color: white;
+    }
+    .btn-success{
+      background-color: #50f39c;
+    }
+    .btn-primary{
+      background-color: rgb(152, 119, 251);
+      color: white;
+    }
+    .btn-dark{
+      background-color: #0D2B36
     }
   </style>
   <!-- js -->
@@ -148,37 +180,37 @@
       </div>
     </section>
     <!-- 勝利者區塊 -->
-    <div class="card w-75 py-5 w-60 cs align-items-center" v-if="winner">
-      <h2 class="m-1" style="font-weight: 700; color: #D59F26;">GAME OVER!</h2>
+    <div class="card w-75 mt-3 py-5 w-60 cs3 align-items-center" v-if="winner">
+      <h2 class="m-1" style="font-weight: 700; color: #D59F26; text-decoration: underline;">GAME OVER!</h2>
       <h3 v-if="winner === 'monster'">You LOST :(</h3>
       <h3 v-else-if="winner === 'player'">You WON :)</h3>
       <h3 v-else>It's a DRAW !</h3>
-      <button @click="startGame" class="btn btn-dark sc w-35 mt-2">Start New Game</button>
+      <button @click="startGame" class="btn btn-dark sc  w-35 mt-2 px-3 py-2 rounded-pill cs">Play again</button>
     </div>
     <!-- 操作 -->
     <div class="row row-cols-2 row-cols-md-4 w-100 p-4 ">
       <div class="col">
         <button 
         @click="attackMonster" 
-        class="btn btn-dark m-1 w-100 cs" 
+        class="btn btn-primary m-1 w-100 cs2" 
         style="height: 85px;">ATTACK</button>
       </div>
       <div class="col">
         <button 
         :disabled="mayUseSpecialAttack" @click="specialAttackMonster" 
-        class="btn btn-danger m-1 w-100 cs" 
+        class="btn btn-danger m-1 w-100 cs2" 
         style="height: 85px;">SPECIAL ATTACK</button>
       </div>
       <div class="col">
         <button 
         @click="healPlayer" 
-        class="btn btn-success m-1 w-100 cs" 
+        class="btn btn-success m-1 w-100 cs2" 
         style="height: 85px;">HEAL</button>
       </div>
       <div class="col">
         <button 
         @click="surrender" 
-        class="btn btn-secondary m-1 w-100 cs" style="height: 85px; font-size: 13px;">SURRENDER</button>
+        class="btn btn-secondary m-1 w-100 cs2" style="height: 85px; font-size: 13px;">SURRENDER</button>
       </div>
     </div>
     <!-- battle log -->

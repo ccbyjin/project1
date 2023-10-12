@@ -65,7 +65,7 @@ const app = Vue.createApp({
       // 定義特別攻擊使用過後才計算是否過了三回合
       if (this.currentRound !== 0 & this.currentRound !== 3) {
         this.currentRound++;
-      }
+      };
       const attackValue = getRandomValue(5, 12);
       this.monsterHealth -= attackValue;
       this.addLogMessage('player', 'attack', attackValue);
@@ -87,7 +87,10 @@ const app = Vue.createApp({
     },
     // 定義治癒
     healPlayer() {
-      this.currentRound++;
+      // 定義特別攻擊使用過後才計算是否過了三回合
+      if (this.currentRound !== 0 & this.currentRound !== 3) {
+        this.currentRound++;
+      };
       const healValue = getRandomValue(8, 20);
       if (this.playerHealth + healValue > 100) {
         this.playerHealth = 100;
